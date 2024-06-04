@@ -24,7 +24,7 @@ LOG_FILE = "log.txt"
 FREE_USER_FILE = "Free_user.txt"
 
 # File to store free user credits
-
+free_user_credits = "Free_user_credit.txt"
 
 # Function to read user IDs from the file
 def read_users():
