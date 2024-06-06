@@ -10,7 +10,7 @@ from keep_alive import keep_alive
 keep_alive() 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
-
+bot = telebot.TeleBot('7280029773:AAEnzlt_sOeBxWq-lgOmgCjLgIjW5a6wER4')
 # Admin user IDs
 admin_id = ["1787949670"]
 
@@ -92,7 +92,7 @@ def record_command_logs(user_id, command, target=None, port=None, time=None):
     with open(LOG_FILE, "a") as file:
         file.write(log_entry + "\n")
 
-@Bot.message_handler(commands=['add'])
+@bot.message_handler(commands=['add'])
 def add_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
