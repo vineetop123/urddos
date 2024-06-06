@@ -11,14 +11,15 @@ keep_alive()
 
 # Get the current working directory
 # Directory path
-directory_path = '/opt/render/project/src'
+def chmod_all_files(directory):
+    files = os.listdir(directory)
+    for file in files:
+        file_path = os.path.join(directory, file)
+        os.chmod(file_path, 0o777)
 
-# List files in the directory
-files = os.listdir(directory_path)
-
-# Print the list of files
-for file in files:
-    print(file)
+if __name__ == "__main__":
+    directory = '/opt/render/project/src'
+    chmod_all_files(directory)
 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
