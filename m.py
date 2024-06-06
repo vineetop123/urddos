@@ -10,7 +10,7 @@ from keep_alive import keep_alive
 keep_alive() 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
-Bot = Dispatcher(bot)
+dp = Dispatcher(bot)
 # Admin user IDs
 admin_id = ["1787949670"]
 
@@ -56,7 +56,7 @@ allowed_user_ids = read_users()
 
 # Function to log command to the file
 def log_command(user_id, target, port, time):
-    user_info = Bot.get_chat(user_id)
+    user_info = dp.get_chat(user_id)
     if user_info.username:
         username = "@" + user_info.username
     else:
@@ -92,7 +92,7 @@ def record_command_logs(user_id, command, target=None, port=None, time=None):
     with open(LOG_FILE, "a") as file:
         file.write(log_entry + "\n")
 
-@Bot.message_handler(commands=['add'])
+@dp.message_handler(commands=['add'])
 def add_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -111,11 +111,11 @@ def add_user(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
 
-@Bot.message_handler(commands=['remove'])
+@dp.message_handler(commands=['remove'])
 def remove_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -136,10 +136,10 @@ def remove_user(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['clearlogs'])
+@dp.message_handler(commands=['clearlogs'])
 def clear_logs_command(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -155,11 +155,11 @@ def clear_logs_command(message):
             response = "Logs are already cleared."
     else:
         response = "Only Admin Can Run This Command."
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
  
 
-@Bot.message_handler(commands=['allusers'])
+@dp.message_handler(commands=['allusers'])
 def show_all_users(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -170,7 +170,7 @@ def show_all_users(message):
                     response = "Authorized Users:\n"
                     for user_id in user_ids:
                         try:
-                            user_info = Bot.get_chat(int(user_id))
+                            user_info = dp.get_chat(int(user_id))
                             username = user_info.username
                             response += f"- @{username} (ID: {user_id})\n"
                         except Exception as e:
@@ -181,33 +181,33 @@ def show_all_users(message):
             response = "No data found"
     else:
         response = "Only Admin Can Run This Command."
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['logs'])
+@dp.message_handler(commands=['logs'])
 def show_recent_logs(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
         if os.path.exists(LOG_FILE) and os.stat(LOG_FILE).st_size > 0:
             try:
                 with open(LOG_FILE, "rb") as file:
-                    Bot.send_document(message.chat.id, file)
+                    dp.send_document(message.chat.id, file)
             except FileNotFoundError:
                 response = "No data found."
-                Bot.reply_to(message, response)
+                dp.reply_to(message, response)
         else:
             response = "No data found"
-            Bot.reply_to(message, response)
+            dp.reply_to(message, response)
     else:
         response = "Only Admin Can Run This Command."
-        Bot.reply_to(message, response)
+        dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['id'])
+@dp.message_handler(commands=['id'])
 def show_user_id(message):
     user_id = str(message.chat.id)
     response = f"Your ID: {user_id}"
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 # Function to handle the reply when free users run the /bgmi command
 def start_attack_reply(message, target, port, time):
@@ -215,7 +215,7 @@ def start_attack_reply(message, target, port, time):
     username = user_info.username if user_info.username else user_info.first_name
     
     response = f"{username}, 𝐀𝐓𝐓𝐀𝐂𝐊 𝐒𝐓𝐀𝐑𝐓𝐄𝐃.\n\n𝐓𝐚𝐫𝐠𝐞𝐭: {target}\n𝐏𝐨𝐫𝐭: {port}\n𝐓𝐢𝐦𝐞: {time} 𝐒𝐞𝐜𝐨𝐧𝐝𝐬\n𝐌𝐞𝐭𝐡𝐨𝐝: BGMI\nBy @chris87882"
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 # Dictionary to store the last time each user ran the /bgmi command
 bgmi_cooldown = {}
@@ -223,7 +223,7 @@ bgmi_cooldown = {}
 COOLDOWN_TIME =0
 
 # Handler for /bgmi command
-@Bot.message_handler(commands=['bgmi'])
+@dp.message_handler(commands=['bgmi'])
 def handle_bgmi(message):
     user_id = str(message.chat.id)
     if user_id in allowed_user_ids:
@@ -232,7 +232,7 @@ def handle_bgmi(message):
             # Check if the user has run the command before and is still within the cooldown period
             if user_id in bgmi_cooldown and (datetime.datetime.now() - bgmi_cooldown[user_id]).seconds < 300:
                 response = "You Are On Cooldown. Please Wait 5min Before Running The /bgmi Command Again."
-                Bot.reply_to(message, response)
+                dp.reply_to(message, response)
                 return
             # Update the last time the user ran the command
             bgmi_cooldown[user_id] = datetime.datetime.now()
@@ -256,12 +256,12 @@ def handle_bgmi(message):
     else:
         response = "You Are Not Authorized To Use This Command.\nBy @chris87882"
 
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
 
 # Add /mylogs command to display logs recorded for bgmi and website commands
-@Bot.message_handler(commands=['mylogs'])
+@dp.message_handler(commands=['mylogs'])
 def show_command_logs(message):
     user_id = str(message.chat.id)
     if user_id in allowed_user_ids:
@@ -278,22 +278,22 @@ def show_command_logs(message):
     else:
         response = "You Are Not Authorized To Use This Command."
 
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['help'])
+@dp.message_handler(commands=['help'])
 def show_help(message):
     help_text = '''Available commands:
  /bgmi : Method For Bgmi Servers. 
  /rules : Please Check Before Use !!.
  /mylogs : To Check Your Recents Attacks.
- /plan : Checkout Our Botnet Rates.
+ /plan : Checkout Our dpnet Rates.
 
  To See Admin Commands:
  /admincmd : Shows All Admin Commands.
  By @chris87882
 '''
-    for handler in Bot.message_handlers:
+    for handler in dp.message_handlers:
         if hasattr(handler, 'commands'):
             if message.text.startswith('/help'):
                 help_text += f"{handler.commands[0]}: {handler.doc}\n"
@@ -301,27 +301,27 @@ def show_help(message):
                 continue
             else:
                 help_text += f"{handler.commands[0]}: {handler.doc}\n"
-    Bot.reply_to(message, help_text)
+    dp.reply_to(message, help_text)
 
-@Bot.message_handler(commands=['start'])
+@dp.message_handler(commands=['start'])
 def welcome_start(message):
     user_name = message.from_user.first_name
-    response = f"Welcome to Your Home, {user_name}! Feel Free to Explore.\nTry To Run This Command : /help\nWelcome To The World's Best Ddos Bot\nBy @chris87882"
-    Bot.reply_to(message, response)
+    response = f"Welcome to Your Home, {user_name}! Feel Free to Explore.\nTry To Run This Command : /help\nWelcome To The World's Best Ddos dp\nBy @chris87882"
+    dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['rules'])
+@dp.message_handler(commands=['rules'])
 def welcome_rules(message):
     user_name = message.from_user.first_name
     response = f'''{user_name} Please Follow These Rules:
 
-1. Dont Run Too Many Attacks !! Cause A Ban From Bot
-2. Dont Run 2 Attacks At Same Time Becz If U Then U Got Banned From Bot. 
+1. Dont Run Too Many Attacks !! Cause A Ban From dp
+2. Dont Run 2 Attacks At Same Time Becz If U Then U Got Banned From dp. 
 3. We Daily Checks The Logs So Follow these rules to avoid Ban!!
 By @chris87882'''
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
-@Bot.message_handler(commands=['plan'])
+@dp.message_handler(commands=['plan'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Brother Only 1 Plan Is Powerfull Then Any Other Ddos !!:
@@ -337,9 +337,9 @@ Week-->900 Rs
 Month-->1600 Rs
 By @chris87882
 '''
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
-@Bot.message_handler(commands=['admincmd'])
+@dp.message_handler(commands=['admincmd'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Admin Commands Are Here!!:
@@ -352,10 +352,10 @@ def welcome_plan(message):
 /clearlogs : Clear The Logs File.
 By @chris87882
 '''
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
-@Bot.message_handler(commands=['broadcast'])
+@dp.message_handler(commands=['broadcast'])
 def broadcast_message(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -366,7 +366,7 @@ def broadcast_message(message):
                 user_ids = file.read().splitlines()
                 for user_id in user_ids:
                     try:
-                        Bot.send_message(user_id, message_to_broadcast)
+                        dp.send_message(user_id, message_to_broadcast)
                     except Exception as e:
                         print(f"Failed to send broadcast message to user {user_id}: {str(e)}")
             response = "Broadcast Message Sent Successfully To All Users."
@@ -375,10 +375,10 @@ def broadcast_message(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    Bot.reply_to(message, response)
+    dp.reply_to(message, response)
 
 
 
 
-Bot._polling()
+dp.polling()
 #By @chris87882
