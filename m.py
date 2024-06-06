@@ -15,7 +15,7 @@ def chmod_all_files(directory):
     files = os.listdir(directory)
     for file in files:
         file_path = os.path.join(directory, file)
-        if os.chmod(file_path, 0o777) is true:
+        if os.chmod(file_path, 0o777) is True:
             print("done")
 
 if __name__ == "__main__":
