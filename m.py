@@ -56,7 +56,7 @@ allowed_user_ids = read_users()
 
 # Function to log command to the file
 def log_command(user_id, target, port, time):
-    user_info = bot.get_chat(user_id)
+    user_info = Bot.get_chat(user_id)
     if user_info.username:
         username = "@" + user_info.username
     else:
@@ -111,7 +111,7 @@ def add_user(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 
@@ -136,7 +136,7 @@ def remove_user(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['clearlogs'])
@@ -155,7 +155,7 @@ def clear_logs_command(message):
             response = "Logs are already cleared."
     else:
         response = "Only Admin Can Run This Command."
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
  
 
@@ -170,7 +170,7 @@ def show_all_users(message):
                     response = "Authorized Users:\n"
                     for user_id in user_ids:
                         try:
-                            user_info = bot.get_chat(int(user_id))
+                            user_info = Bot.get_chat(int(user_id))
                             username = user_info.username
                             response += f"- @{username} (ID: {user_id})\n"
                         except Exception as e:
@@ -181,7 +181,7 @@ def show_all_users(message):
             response = "No data found"
     else:
         response = "Only Admin Can Run This Command."
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['logs'])
@@ -191,23 +191,23 @@ def show_recent_logs(message):
         if os.path.exists(LOG_FILE) and os.stat(LOG_FILE).st_size > 0:
             try:
                 with open(LOG_FILE, "rb") as file:
-                    bot.send_document(message.chat.id, file)
+                    Bot.send_document(message.chat.id, file)
             except FileNotFoundError:
                 response = "No data found."
-                bot.reply_to(message, response)
+                Bot.reply_to(message, response)
         else:
             response = "No data found"
-            bot.reply_to(message, response)
+            Bot.reply_to(message, response)
     else:
         response = "Only Admin Can Run This Command."
-        bot.reply_to(message, response)
+        Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['id'])
 def show_user_id(message):
     user_id = str(message.chat.id)
     response = f"Your ID: {user_id}"
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 # Function to handle the reply when free users run the /bgmi command
 def start_attack_reply(message, target, port, time):
@@ -215,7 +215,7 @@ def start_attack_reply(message, target, port, time):
     username = user_info.username if user_info.username else user_info.first_name
     
     response = f"{username}, 𝐀𝐓𝐓𝐀𝐂𝐊 𝐒𝐓𝐀𝐑𝐓𝐄𝐃.\n\n𝐓𝐚𝐫𝐠𝐞𝐭: {target}\n𝐏𝐨𝐫𝐭: {port}\n𝐓𝐢𝐦𝐞: {time} 𝐒𝐞𝐜𝐨𝐧𝐝𝐬\n𝐌𝐞𝐭𝐡𝐨𝐝: BGMI\nBy @chris87882"
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 # Dictionary to store the last time each user ran the /bgmi command
 bgmi_cooldown = {}
@@ -232,7 +232,7 @@ def handle_bgmi(message):
             # Check if the user has run the command before and is still within the cooldown period
             if user_id in bgmi_cooldown and (datetime.datetime.now() - bgmi_cooldown[user_id]).seconds < 300:
                 response = "You Are On Cooldown. Please Wait 5min Before Running The /bgmi Command Again."
-                bot.reply_to(message, response)
+                Bot.reply_to(message, response)
                 return
             # Update the last time the user ran the command
             bgmi_cooldown[user_id] = datetime.datetime.now()
@@ -256,7 +256,7 @@ def handle_bgmi(message):
     else:
         response = "You Are Not Authorized To Use This Command.\nBy @chris87882"
 
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 
@@ -278,7 +278,7 @@ def show_command_logs(message):
     else:
         response = "You Are Not Authorized To Use This Command."
 
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['help'])
@@ -293,7 +293,7 @@ def show_help(message):
  /admincmd : Shows All Admin Commands.
  By @chris87882
 '''
-    for handler in bot.message_handlers:
+    for handler in Bot.message_handlers:
         if hasattr(handler, 'commands'):
             if message.text.startswith('/help'):
                 help_text += f"{handler.commands[0]}: {handler.doc}\n"
@@ -301,13 +301,13 @@ def show_help(message):
                 continue
             else:
                 help_text += f"{handler.commands[0]}: {handler.doc}\n"
-    bot.reply_to(message, help_text)
+    Bot.reply_to(message, help_text)
 
 @Bot.message_handler(commands=['start'])
 def welcome_start(message):
     user_name = message.from_user.first_name
     response = f"Welcome to Your Home, {user_name}! Feel Free to Explore.\nTry To Run This Command : /help\nWelcome To The World's Best Ddos Bot\nBy @chris87882"
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['rules'])
@@ -319,7 +319,7 @@ def welcome_rules(message):
 2. Dont Run 2 Attacks At Same Time Becz If U Then U Got Banned From Bot. 
 3. We Daily Checks The Logs So Follow these rules to avoid Ban!!
 By @chris87882'''
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 @Bot.message_handler(commands=['plan'])
 def welcome_plan(message):
@@ -337,7 +337,7 @@ Week-->900 Rs
 Month-->1600 Rs
 By @chris87882
 '''
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 @Bot.message_handler(commands=['admincmd'])
 def welcome_plan(message):
@@ -352,7 +352,7 @@ def welcome_plan(message):
 /clearlogs : Clear The Logs File.
 By @chris87882
 '''
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 @Bot.message_handler(commands=['broadcast'])
@@ -366,7 +366,7 @@ def broadcast_message(message):
                 user_ids = file.read().splitlines()
                 for user_id in user_ids:
                     try:
-                        bot.send_message(user_id, message_to_broadcast)
+                        Bot.send_message(user_id, message_to_broadcast)
                     except Exception as e:
                         print(f"Failed to send broadcast message to user {user_id}: {str(e)}")
             response = "Broadcast Message Sent Successfully To All Users."
@@ -375,10 +375,10 @@ def broadcast_message(message):
     else:
         response = "Only Admin Can Run This Command."
 
-    bot.reply_to(message, response)
+    Bot.reply_to(message, response)
 
 
 
 
-bot.polling()
+Bot.polling()
 #By @chris87882
