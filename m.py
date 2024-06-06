@@ -10,6 +10,7 @@ from keep_alive import keep_alive
 keep_alive() 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
+Bot = dispatcher(bot)
 # Admin user IDs
 admin_id = ["1787949670"]
 
@@ -91,7 +92,7 @@ def record_command_logs(user_id, command, target=None, port=None, time=None):
     with open(LOG_FILE, "a") as file:
         file.write(log_entry + "\n")
 
-@bot.message_handler(commands=['add'])
+@Bot.message_handler(commands=['add'])
 def add_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -114,7 +115,7 @@ def add_user(message):
 
 
 
-@bot.message_handler(commands=['remove'])
+@Bot.message_handler(commands=['remove'])
 def remove_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -138,7 +139,7 @@ def remove_user(message):
     bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['clearlogs'])
+@Bot.message_handler(commands=['clearlogs'])
 def clear_logs_command(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -158,7 +159,7 @@ def clear_logs_command(message):
 
  
 
-@bot.message_handler(commands=['allusers'])
+@Bot.message_handler(commands=['allusers'])
 def show_all_users(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -183,7 +184,7 @@ def show_all_users(message):
     bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['logs'])
+@Bot.message_handler(commands=['logs'])
 def show_recent_logs(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
@@ -202,7 +203,7 @@ def show_recent_logs(message):
         bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['id'])
+@Bot.message_handler(commands=['id'])
 def show_user_id(message):
     user_id = str(message.chat.id)
     response = f"Your ID: {user_id}"
@@ -222,7 +223,7 @@ bgmi_cooldown = {}
 COOLDOWN_TIME =0
 
 # Handler for /bgmi command
-@bot.message_handler(commands=['bgmi'])
+@Bot.message_handler(commands=['bgmi'])
 def handle_bgmi(message):
     user_id = str(message.chat.id)
     if user_id in allowed_user_ids:
@@ -260,7 +261,7 @@ def handle_bgmi(message):
 
 
 # Add /mylogs command to display logs recorded for bgmi and website commands
-@bot.message_handler(commands=['mylogs'])
+@Bot.message_handler(commands=['mylogs'])
 def show_command_logs(message):
     user_id = str(message.chat.id)
     if user_id in allowed_user_ids:
@@ -280,7 +281,7 @@ def show_command_logs(message):
     bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['help'])
+@Bot.message_handler(commands=['help'])
 def show_help(message):
     help_text = '''Available commands:
  /bgmi : Method For Bgmi Servers. 
@@ -302,14 +303,14 @@ def show_help(message):
                 help_text += f"{handler.commands[0]}: {handler.doc}\n"
     bot.reply_to(message, help_text)
 
-@bot.message_handler(commands=['start'])
+@Bot.message_handler(commands=['start'])
 def welcome_start(message):
     user_name = message.from_user.first_name
     response = f"Welcome to Your Home, {user_name}! Feel Free to Explore.\nTry To Run This Command : /help\nWelcome To The World's Best Ddos Bot\nBy @chris87882"
     bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['rules'])
+@Bot.message_handler(commands=['rules'])
 def welcome_rules(message):
     user_name = message.from_user.first_name
     response = f'''{user_name} Please Follow These Rules:
@@ -320,7 +321,7 @@ def welcome_rules(message):
 By @chris87882'''
     bot.reply_to(message, response)
 
-@bot.message_handler(commands=['plan'])
+@Bot.message_handler(commands=['plan'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Brother Only 1 Plan Is Powerfull Then Any Other Ddos !!:
@@ -338,7 +339,7 @@ By @chris87882
 '''
     bot.reply_to(message, response)
 
-@bot.message_handler(commands=['admincmd'])
+@Bot.message_handler(commands=['admincmd'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Admin Commands Are Here!!:
@@ -354,7 +355,7 @@ By @chris87882
     bot.reply_to(message, response)
 
 
-@bot.message_handler(commands=['broadcast'])
+@Bot.message_handler(commands=['broadcast'])
 def broadcast_message(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:
