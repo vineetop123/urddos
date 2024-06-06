@@ -1,16 +1,18 @@
 #!/usr/bin/python3
 #By chris
-from aiogram import Bot, Dispatcher, executor, types
+
 import telebot
 import subprocess
 import requests
 import datetime
 import os
 from keep_alive import keep_alive
-keep_alive() 
+from aiogram import Bot, Dispatcher, executor, types
+
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
 dp = Dispatcher(bot)
+
 # Admin user IDs
 admin_id = ["1787949670"]
 
@@ -379,6 +381,6 @@ def broadcast_message(message):
 
 
 
-
-dp.polling()
+if __name__ == '__main__':
+    executor.start_polling(dp)
 #By @chris87882
