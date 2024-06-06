@@ -15,7 +15,8 @@ def chmod_all_files(directory):
     files = os.listdir(directory)
     for file in files:
         file_path = os.path.join(directory, file)
-        os.chmod(file_path, 0o777)
+        if os.chmod(file_path, 0o777) is true:
+            print("done")
 
 if __name__ == "__main__":
     directory = '/opt/render/project/src'
