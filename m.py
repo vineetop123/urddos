@@ -10,7 +10,6 @@ from keep_alive import keep_alive
 keep_alive() 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
-Bot = dispatcher(bot)
 # Admin user IDs
 admin_id = ["1787949670"]
 
