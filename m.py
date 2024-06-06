@@ -380,5 +380,5 @@ def broadcast_message(message):
 
 
 
-Bot.polling()
+Bot._polling()
 #By @chris87882
