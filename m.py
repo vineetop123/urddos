@@ -10,8 +10,15 @@ from keep_alive import keep_alive
 keep_alive()
 
 # Get the current working directory
-current_directory = os.getcwd()
-print("Current Directory:", current_directory)
+# Directory path
+directory_path = '/opt/render/project/src'
+
+# List files in the directory
+files = os.listdir(directory_path)
+
+# Print the list of files
+for file in files:
+    print(file)
 
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
