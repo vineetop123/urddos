@@ -8,7 +8,7 @@ import datetime
 import os
 from keep_alive import keep_alive
 from aiogram import Bot, Dispatcher, executor, types
-
+keep_alive()
 # insert your Telegram bot token here
 bot = Bot(token=os.environ.get('token'))
 dp = Dispatcher(bot)
