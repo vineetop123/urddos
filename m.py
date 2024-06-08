@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 #By chris
-from aiogram import Bot, Dispatcher, executor, types
 import telebot
 import subprocess
 import requests
@@ -9,21 +8,7 @@ import os
 from keep_alive import keep_alive
 keep_alive()
 
-# Get the current working directory
-# Directory path
-def chmod_all_files(directory):
-    files = os.listdir(directory)
-    for file in files:
-        file_path = os.path.join(directory, file)
-        if os.chmod(file_path, 0o777) is True:
-            print("done")
-
-if __name__ == "__main__":
-    directory = '/opt/render/project/src'
-    chmod_all_files(directory)
-
 # insert your Telegram bot token here
-bot = Bot(token=os.environ.get('token'))
 bot = telebot.TeleBot('7280029773:AAEnzlt_sOeBxWq-lgOmgCjLgIjW5a6wER4')
 # Admin user IDs
 admin_id = ["1787949670"]
