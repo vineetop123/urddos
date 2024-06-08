@@ -8,7 +8,7 @@ import datetime
 import os
 from keep_alive import keep_alive
 from aiogram import Bot, Dispatcher, executor, types
-
+keep_alive()
 # insert your Telegram bot token here
 bot = telebot.TeleBot('7280029773:AAEnzlt_sOeBxWq-lgOmgCjLgIjW5a6wER4')
 
