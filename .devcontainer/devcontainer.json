@@ -1,7 +1,7 @@
 {
     "name": "My Codespace",
     "image": "mcr.microsoft.com/vscode/devcontainers/python:3.8",
-    "postStartCommand": "python3 /workspaces/Urddos/soul.py",
+    "postStartCommand": "python3 /workspaces/urddos/soul.py",
     "customizations": {
         "vscode": {
             "settings": {
